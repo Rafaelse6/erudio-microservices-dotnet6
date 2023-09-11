@@ -5,7 +5,6 @@ namespace GeekShopping.Web.Controllers
 {
     public class ProductController : Controller
     {
-
         private readonly IProductService _productService;
 
         public ProductController(IProductService productService)
