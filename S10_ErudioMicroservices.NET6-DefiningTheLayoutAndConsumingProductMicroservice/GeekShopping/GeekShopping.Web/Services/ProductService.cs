@@ -6,9 +6,7 @@ namespace GeekShopping.Web.Services
 {
     public class ProductService : IProductService
     {
-
         private readonly HttpClient _client;
-
         public const string BasePath = "api/v1/product";
 
         public ProductService(HttpClient client)
@@ -24,7 +22,7 @@ namespace GeekShopping.Web.Services
 
         public async Task<ProductModel> FindProductById(long id)
         {
-            var response = await _client.GetAsync($"{BasePath}/id");
+            var response = await _client.GetAsync($"{BasePath}/{id}");
             return await response.ReadContentAs<ProductModel>();
         }
 
@@ -35,7 +33,6 @@ namespace GeekShopping.Web.Services
                 return await response.ReadContentAs<ProductModel>();
             else throw new Exception("Something went wrong when calling API");
         }
-
         public async Task<ProductModel> UpdateProduct(ProductModel model)
         {
             var response = await _client.PutAsJson(BasePath, model);
@@ -46,7 +43,7 @@ namespace GeekShopping.Web.Services
 
         public async Task<bool> DeleteProductById(long id)
         {
-            var response = await _client.DeleteAsync($"{BasePath}/id");
+            var response = await _client.DeleteAsync($"{BasePath}/{id}");
             if (response.IsSuccessStatusCode)
                 return await response.ReadContentAs<bool>();
             else throw new Exception("Something went wrong when calling API");
