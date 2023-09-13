@@ -3,6 +3,8 @@ using GeekShopping.Web.Services.IServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddRouting(options => options.LowercaseUrls = true);
+
 builder.Services.AddHttpClient<IProductService, ProductService>(
 
     c => c.BaseAddress = new Uri(builder.Configuration["ServiceUrls:ProductAPI"])

@@ -38,7 +38,7 @@ namespace GeekShopping.Web.Controllers
 
         public async Task<IActionResult> ProductUpdate(int id)
         {
-            var model = await _productService.FindProductById(id);
+            ProductModel model = await _productService.FindProductById(id);
             if (model != null) return View(model);
             return NotFound();
         }
