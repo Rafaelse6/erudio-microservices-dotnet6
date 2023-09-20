@@ -16,10 +16,10 @@ namespace GeekShopping.Web.Controllers
         public HomeController(ILogger<HomeController> logger, IProductService productService)
         {
             _logger = logger;
-            this.productService = productService;
+            this._productService = productService;
         }
 
-        public async Task<IActionResult> IndexAsync()
+        public async Task<IActionResult> Index()
         {
             var token = await HttpContext.GetTokenAsync("access_token");
             var products = await _productService.FindAllProducts(token);
@@ -41,7 +41,7 @@ namespace GeekShopping.Web.Controllers
         public async Task<IActionResult> Login()
         {
             var accessToken = await HttpContext.GetTokenAsync("access_token");
-            return RedirectToAction(nameof(IndexAsync));
+            return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Logout()
