@@ -12,7 +12,7 @@ namespace GeekShopping.Web.Models
 
         public long ProductId { get; set; }
 
-        public ProductVO Product { get; set; }
+        public ProductViewModel Product { get; set; }
 
         [Column("count")]
         public int Count { get; set; }
