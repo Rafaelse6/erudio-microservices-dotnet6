@@ -2,7 +2,7 @@
 {
     public class CouponVO
     {
-        public long id {  get; set; }
+        public long Id {  get; set; }
 
         public string CouponCode { get; set; }
 
