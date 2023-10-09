@@ -5,6 +5,7 @@ using Microsoft.OpenApi.Models;
 using GeekShopping.CartAPI.Model.Context;
 using GeekShopping.CartAPI.Config;
 using GeekShopping.CartAPI.Repository;
+using GeekShopping.CartAPI.RabbitMQSender;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +22,7 @@ IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
 builder.Services.AddSingleton(mapper);
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<ICartRepository, CartRepository>();
+builder.Services.AddSingleton<IRabbitMQMessageSender, RabbitMQMessageSender>();
 
 builder.Services.AddControllers();
 
