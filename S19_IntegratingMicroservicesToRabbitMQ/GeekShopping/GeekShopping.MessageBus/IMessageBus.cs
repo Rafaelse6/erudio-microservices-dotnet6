@@ -2,6 +2,6 @@
 {
     public interface IMessageBus
     {
-        Task PublicMessage(BaseMessage message, string topicaName);
+        Task PublicMessage(BaseMessage message, string queueName);
     }
 }
