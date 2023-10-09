@@ -1,3 +1,4 @@
+using GeekShopping.CartAPI.Repository;
 using GeekShopping.OrderAPI.Model.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -20,7 +21,7 @@ dbContextBuilder.UseMySql(
     new MySqlServerVersion(new Version(8, 0, 29))
 );
 
-//builder.Services.AddSingleton(new OrderRepository(dbContextBuilder.Options));
+builder.Services.AddSingleton(new OrderRepository(dbContextBuilder.Options));
 
 //builder.Services.AddHostedService<RabbitMQCheckoutConsumer>();
 
