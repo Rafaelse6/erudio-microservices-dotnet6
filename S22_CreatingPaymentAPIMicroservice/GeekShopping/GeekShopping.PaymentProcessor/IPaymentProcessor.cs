@@ -1,7 +1,7 @@
 ﻿namespace GeekShopping.PaymentProcessor
 {
-    public class Class1
+    public interface IPaymentProcessor
     {
-
+        bool PaymentProcessor();
     }
 }
