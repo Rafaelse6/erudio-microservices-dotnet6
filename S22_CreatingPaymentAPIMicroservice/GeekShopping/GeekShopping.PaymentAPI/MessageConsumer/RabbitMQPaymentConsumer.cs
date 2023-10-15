@@ -1,4 +1,5 @@
 ﻿using GeekShopping.PaymentAPI.Messages;
+using GeekShopping.PaymentAPI.RabbitMQSender;
 using GeekShopping.PaymentProcessor;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -11,11 +12,14 @@ namespace GeekShopping.PaymentAPI.MessageConsumer
     {
         private IConnection _connection;
         private IModel _channel;
+        private IRabbitMQMessageSender _rabbitMQMessageSender;
         private readonly IPaymentProcessor _processPayment;
 
-        public RabbitMQPaymentConsumer(IPaymentProcessor processPayment)
+        public RabbitMQPaymentConsumer(IPaymentProcessor processPayment,
+            IRabbitMQMessageSender rabbitMQMessageSender)
         {
             _processPayment = processPayment;
+            _rabbitMQMessageSender = rabbitMQMessageSender;
 
             var factory = new ConnectionFactory
             {
@@ -56,7 +60,7 @@ namespace GeekShopping.PaymentAPI.MessageConsumer
 
             try
             {
-                //_rabbitMQMessageSender.SendMessage(paymentResult, "orderpaymentresultqueue");
+                _rabbitMQMessageSender.SendMessage(paymentResult, "orderpaymentresultqueue");
             }
             catch (Exception)
             {
