@@ -2,9 +2,7 @@
 using GeekShopping.CartAPI.Messages;
 using GeekShopping.CartAPI.RabbitMQSender;
 using GeekShopping.CartAPI.Repository;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
 
 namespace GeekShopping.CartAPI.Controllers
 {
@@ -16,7 +14,9 @@ namespace GeekShopping.CartAPI.Controllers
         private ICouponRepository _couponRepository;
         private IRabbitMQMessageSender _rabbitMQMessageSender;
 
-        public CartController(ICartRepository cartRepository, ICouponRepository couponRepository, IRabbitMQMessageSender rabbitMQMessageSender)
+        public CartController(ICartRepository cartRepository,
+            ICouponRepository couponRepository,
+            IRabbitMQMessageSender rabbitMQMessageSender)
         {
             _cartRepository = cartRepository ?? throw new ArgumentNullException(nameof(cartRepository));
             _couponRepository = couponRepository ?? throw new ArgumentNullException(nameof(couponRepository));
@@ -31,6 +31,30 @@ namespace GeekShopping.CartAPI.Controllers
             return Ok(cart);
         }
 
+        [HttpPost("add-cart")]
+        public async Task<ActionResult<CartVO>> AddCart(CartVO vo)
+        {
+            var cart = await _cartRepository.SaveOrUpdateCart(vo);
+            if (cart == null) return NotFound();
+            return Ok(cart);
+        }
+
+        [HttpPut("update-cart")]
+        public async Task<ActionResult<CartVO>> UpdateCart(CartVO vo)
+        {
+            var cart = await _cartRepository.SaveOrUpdateCart(vo);
+            if (cart == null) return NotFound();
+            return Ok(cart);
+        }
+
+        [HttpDelete("remove-cart/{id}")]
+        public async Task<ActionResult<CartVO>> RemoveCart(int id)
+        {
+            var status = await _cartRepository.RemoveFromCart(id);
+            if (!status) return BadRequest();
+            return Ok(status);
+        }
+
         [HttpPost("apply-coupon")]
         public async Task<ActionResult<CartVO>> ApplyCoupon(CartVO vo)
         {
@@ -38,6 +62,7 @@ namespace GeekShopping.CartAPI.Controllers
             if (!status) return NotFound();
             return Ok(status);
         }
+
         [HttpDelete("remove-coupon/{userId}")]
         public async Task<ActionResult<CartVO>> ApplyCoupon(string userId)
         {
@@ -69,31 +94,9 @@ namespace GeekShopping.CartAPI.Controllers
             // RabbitMQ logic comes here!!!
             _rabbitMQMessageSender.SendMessage(vo, "checkoutqueue");
 
+            await _cartRepository.ClearCart(vo.UserId);
+
             return Ok(vo);
-        }
-
-        [HttpPost("add-cart")]
-        public async Task<ActionResult<CartVO>> AddCart(CartVO vo)
-        {
-            var cart = await _cartRepository.SaveOrUpdateCart(vo);
-            if (cart == null) return NotFound();
-            return Ok(cart);
-        }
-
-        [HttpPut("update-cart")]
-        public async Task<ActionResult<CartVO>> UpdateCart(CartVO vo)
-        {
-            var cart = await _cartRepository.SaveOrUpdateCart(vo);
-            if (cart == null) return NotFound();
-            return Ok(cart);
-        }
-
-        [HttpDelete("remove-cart/{id}")]
-        public async Task<ActionResult<CartVO>> RemoveCart(int id)
-        {
-            var status = await _cartRepository.RemoveFromCart(id);
-            if (!status) return BadRequest();
-            return Ok(status);
         }
     }
 }

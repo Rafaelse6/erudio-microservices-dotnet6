@@ -2,7 +2,6 @@
 using GeekShopping.Web.Services.IServices;
 using GeekShopping.Web.Utils;
 using System.Net.Http.Headers;
-using System.Reflection;
 
 namespace GeekShopping.Web.Services
 {
@@ -50,7 +49,6 @@ namespace GeekShopping.Web.Services
             else throw new Exception("Something went wrong when calling API");
         }
 
-
         public async Task<bool> ApplyCoupon(CartViewModel model, string token)
         {
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -84,7 +82,7 @@ namespace GeekShopping.Web.Services
             else throw new Exception("Something went wrong when calling API");
         }
 
-        public Task<bool> ClearCart(string userId, string token)
+        public async Task<bool> ClearCart(string userId, string token)
         {
             throw new NotImplementedException();
         }
